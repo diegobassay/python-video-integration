@@ -1,0 +1,131 @@
+<html>
+	<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+	<script type="text/javascript">
+	
+	var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+	$(function(){
+
+		socket.on('added_to_file', ( msg ) => {
+			console.log(JSON.stringify(msg));
+		});
+
+		$('#start_time, #end_time').mask('00:00');
+
+		$('#send_cut').click(() => {
+
+			const cuts = $("#table_cuts tr");
+			const filename = $('#filename').val();
+
+			var cut_objects = cuts.map((index, cut) => {
+				let obj = {};
+				let objs = $(cut).find("td");
+				for(var a = 0; a<objs.length; a++){
+					switch(a){
+						case 0:
+							obj.start_time = $(objs[a]).html();
+							break;
+						case 1:
+							obj.end_time = $(objs[a]).html();
+							break;
+						case 2:
+							obj.title = $(objs[a]).html();
+					}
+				}
+				return obj;
+
+			}).get();
+
+			socket.emit('addfile', {filename:filename, cuts: cut_objects});
+
+		});
+
+		$('#add_cut').click(() => {
+
+			var showHideSend = () =>{
+				if ($('#table_cuts tr').find('td').length > 0) {
+					$('#send_cut').show();
+				}else{
+					$('#send_cut').hide();
+				}
+			}
+
+			let start_time = $('#start_time');
+			let end_time = $('#end_time');
+			let title = $('#title');
+			let item_cut = $(document.createElement('tr'));
+			let item_start_time = $(document.createElement('td'));
+			let item_end_time = $(document.createElement('td'));
+			let item_title = $(document.createElement('td'));
+			item_start_time.html(start_time.val());
+			item_end_time.html(end_time.val());
+			item_title.html(title.val());
+			item_cut.append(item_start_time);
+			item_cut.append(item_end_time);
+			item_cut.append(item_title);
+			item_cut.click(function(e) {
+				$(this).remove();
+				showHideSend();
+			});
+			$("#table_cuts").append(item_cut);
+			start_time.val('');
+			end_time.val('');
+			title.val('');
+			showHideSend();
+		});
+
+	});
+</script>
+		<style>
+		#main{
+		  width: 50%;
+		  margin: auto;
+		  padding: 10px;
+		  text-align: center;
+		}
+		</style>
+
+	</head>
+
+	<body>
+		<div id="main">
+
+			{% if video %}
+				<h1>Edit video cuts</h1>
+				<video width="640" height="480" controls>
+				<source src="videos/{{ video }}" type="video/mp4">
+				Browser fail to play!!!
+				</video>
+				<br/>
+				<form method="POST">
+				  <input type="hidden" name="filename" id="filename" value="{{ video }}"/>
+				  <input type="text" name="start_time" id="start_time" placeholder="Start Time"/>
+				  <input type="text" name="end_time" id="end_time" placeholder="End Time"/>
+				  <input type="text" name="title" id="title" placeholder="Title"/>
+				  <input type="button" id="add_cut" value="Add cut" placeholder="Add cut"/>
+				</form>
+
+				<table id="table_cuts" align="center" border="1" cellpadding="0" cellspacing="0" style="width:640px;">
+
+				</table>
+				<br/>
+				<input type="button" id="send_cut" value="Send cut" placeholder="Send cut" style="display:none;"/>
+
+			{% else %}
+
+				<h1>Select one mp4 vídeo</h1>
+				{% if msg %}
+					<h4 style="color:red;">{{ msg }}</h4>
+				{% endif %}
+				<form action = "/upload" method = "POST" enctype = "multipart/form-data">
+					<input type="file" name="video_file" />
+					<input type="submit"/>
+				</form>
+
+			{% endif %}
+		</div>
+	</body>
+</html>
