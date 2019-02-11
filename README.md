@@ -63,15 +63,15 @@ O diretório de destino tem o nome do vídeo cortado e dentro os cortes selecion
 
 ## Serviços e urls disponíveis 
 
-*web.py
+
 |Metodo|URL|Descrição|
 |------|---|-----------|
 |GET|/upload/|Exibe a interface de upload e corte de vídeos|
 |POST|/upload/|Envia o arquivo para o diretório de videos configurado na aplicação|
 |XHR|/addfile/|Cria um arquivo que será processado pelo Watcher|
 
-*api.py
+
 |Metodo|URL|Descrição|
 |------|---|-----------|
-|POST|/cutvideo/|Recebe as informações do vídeo e executa os a criação de diretórios e os cortes em FFmpeg |
-|XHR|//|Versão da API|
+|POST|/cutvideo/|Recebe as informações do vídeo e executa os a criação de diretórios e os cortes em FFmpeg|
+|XHR|/version/|Versão da API|
