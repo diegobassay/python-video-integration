@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory, redirect
 from flask_socketio import SocketIO
 from inspect import getmembers
 from pprint import pprint
@@ -10,6 +10,10 @@ from .config import endpoints_config
 
 app = Flask(__name__, static_folder=os.getcwd() + '/videos', template_folder=os.getcwd() + '/app/templates')
 socketio = SocketIO(app)
+
+@app.route("/")
+def index():
+    return redirect('/upload')
 
 @app.route('/upload', methods = ['GET', 'POST'])
 def video_upload():

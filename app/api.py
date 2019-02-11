@@ -12,7 +12,7 @@ class ApiView(FlaskView):
 	route_base = '/'
 	@route('/')
 	def index(self):
-		return 'Api Globo.com'
+		return 'Api Minha Loja de TV.com'
 	 
 	@route('/cutvideo', methods=['POST'])
 	def exec_cut_video(self):
