@@ -73,5 +73,5 @@ O diretório de destino tem o nome do vídeo cortado e dentro os cortes selecion
 *api.py
 |Metodo|URL|Descrição|
 |------|---|-----------|
-|POST|/cutvideo/||Recebe as informações do vídeo e executa os a criação de diretórios e os cortes em FFmpeg |
-|XHR|/|Versão da API|
+|POST|/cutvideo/|Recebe as informações do vídeo e executa os a criação de diretórios e os cortes em FFmpeg |
+|XHR|//|Versão da API|
