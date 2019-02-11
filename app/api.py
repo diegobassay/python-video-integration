@@ -10,9 +10,9 @@ app = Flask(__name__)
 
 class ApiView(FlaskView):
 	route_base = '/'
-	@route('/')
+	@route('/version')
 	def index(self):
-		return 'Api Minha Loja de TV.com'
+		return 'Api Minha Loja de TV.com (v.1.0.0)'
 	 
 	@route('/cutvideo', methods=['POST'])
 	def exec_cut_video(self):
